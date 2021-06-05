@@ -41,6 +41,9 @@ def load_data(data_dir):
             dim = (IMG_WIDTH, IMG_HEIGHT)
             # resized the image
             image_resized = cv2.resize(image, dim, interpolation = cv2.INTER_AREA)
+            #save resized image with name test.png
+            #cv2.imwrite('/home/arpine/Desktop/data/test/test.png',image_resized) 
+            
             # add image and their directory name to images and labels list
             images.append(image_resized)
             labels.append(dir)
