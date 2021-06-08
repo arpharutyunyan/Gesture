@@ -77,23 +77,7 @@ def main():
 
     video.release()
     cv2.destroyAllWindows()
-    # pred_image_path = "/home/arpine/Desktop/BalatonAI_data/IMG_9870.JPG"
-    # # pred_image = cv2.imread(pred_image_path)
     
-    # dim = (IMG_WIDTH, IMG_HEIGHT)
-    
-
-    # image = tf.keras.preprocessing.image.load_img(pred_image_path, target_size=dim)
-    # input_arr = tf.keras.preprocessing.image.img_to_array(image)
-    # input_arr = np.array([input_arr])
-    # input_arr = input_arr.astype('float32')/255
-    # predictions = model.predict(input_arr)
-    # pre_class = np.argmax(predictions, axis=-1)
-    # print(pre_class)
-    
-
-
-
     # # Save model to file
     # if len(sys.argv) == 3:
     #     filename = sys.argv[2]
