@@ -1,9 +1,10 @@
+from PIL.Image import Image
 import cv2
 import numpy as np
 import os
 import sys
 import tensorflow as tf
-
+from PIL import Image, ImageFilter
 
 from sklearn.model_selection import train_test_split
 from tensorflow.python.ops.gen_math_ops import mod
@@ -13,7 +14,7 @@ IMG_WIDTH = 20
 IMG_HEIGHT = 20
 NUM_CATEGORIES = 6
 TEST_SIZE = 0.4
-GESTURE = ["start", "up", "down", "none", "stop", "none"]
+GESTURE = {0:"start", 1:"up", 2:"down", 3:"right", 4:"left", 5:"stop"}
 
 def main():
     # Check command-line arguments
@@ -49,21 +50,24 @@ def main():
         # to flip the video with 180 degree 
         image = cv2.flip(image, 1)
         cv2.imshow('frame', image)
-    
+        
+        # save image for prediction
         image = cv2.imwrite('Frame'+str(0)+'.jpg', image)
         image = "Frame0.jpg"
-        #pred_image = cv2.imread(pred_image_path)
-        
+      
         dim = (IMG_WIDTH, IMG_HEIGHT)
         
-
         image = tf.keras.preprocessing.image.load_img(image, target_size=dim)
+        # Converts a PIL Image instance to a Numpy array. Return a 3D Numpy array.
         input_arr = tf.keras.preprocessing.image.img_to_array(image)
+        # Convert single image to a batch.
         input_arr = np.array([input_arr])
         input_arr = input_arr.astype('float32')/255
+        # Generates output predictions for the input samples. Return Numpy array(s) of predictions.
         predictions = model.predict(input_arr)
+        # Return the index_array of the maximum values along an axis.
         pre_class = np.argmax(predictions, axis=-1)
-        print(pre_class)
+        print(GESTURE[pre_class[0]])
     
 
         # the 'q' button is set as the
@@ -115,8 +119,6 @@ def load_data(data_dir):
             dim = (IMG_WIDTH, IMG_HEIGHT)
             # resized the image
             image_resized = cv2.resize(image, dim, interpolation = cv2.INTER_AREA)
-            #save resized image with name test.png
-            #cv2.imwrite('/home/arpine/Desktop/data/test/test.png',image_resized) 
             
             # add image and their directory name to images and labels list
             images.append(image_resized)
