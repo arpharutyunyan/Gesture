@@ -5,6 +5,7 @@ import os
 import sys
 import tensorflow as tf
 from PIL import Image, ImageFilter
+from datetime import datetime
 
 from sklearn.model_selection import train_test_split
 from tensorflow.python.ops.gen_math_ops import mod
@@ -21,10 +22,17 @@ def main():
     if len(sys.argv) not in [2, 3]:
         sys.exit("Usage: python gesture_recognition.py data_directory [model.h5]")
     
+
     print("Loading ============================================")
+    start_time = datetime.now()
     # Get image arrays and labels for all image files
     images, labels = load_data(sys.argv[1])
+   
     print("====================================================")
+    finish_loading_time = datetime.now()
+    print("Images load time: ", finish_loading_time - start_time)
+    wait = input("Press ENTER to continue fitting NN.")
+
     # Split data into training and testing sets
     labels = tf.keras.utils.to_categorical(labels)
     x_train, x_test, y_train, y_test = train_test_split(
@@ -38,6 +46,10 @@ def main():
 
     # Evaluate neural network performance
     model.evaluate(x_test, y_test, verbose=2)
+    fitting_time = datetime.now()
+
+    print("NN fit time: ", fitting_time - finish_loading_time)
+    wait = input("Press ENTER to continue opening camera.")
    
    #########################################################
     video = cv2.VideoCapture(0)
