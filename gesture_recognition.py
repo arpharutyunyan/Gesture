@@ -1,3 +1,4 @@
+
 from PIL.Image import Image
 import cv2
 import numpy as np
@@ -11,11 +12,11 @@ from sklearn.model_selection import train_test_split
 from tensorflow.python.ops.gen_math_ops import mod
 
 EPOCHS = 10
-IMG_WIDTH = 20
-IMG_HEIGHT = 20
+IMG_WIDTH = 216
+IMG_HEIGHT = 216
 NUM_CATEGORIES = 6
 TEST_SIZE = 0.4
-GESTURE = {0:"start", 1:"up", 2:"down", 3:"right", 4:"left", 5:"stop"}
+GESTURE = {0:"ok", 1:"down", 2:"up", 3:"palm", 4:"fist", 5:"l"}
 
 def main():
     # Check command-line arguments
@@ -42,7 +43,7 @@ def main():
     model = get_model()
     
     # Fit model on training data
-    model.fit(x_train, y_train, epochs=EPOCHS)
+    model.fit(x_train, y_train, batch_size=64, epochs=EPOCHS)
 
     # Evaluate neural network performance
     model.evaluate(x_test, y_test, verbose=2)
@@ -56,17 +57,17 @@ def main():
     
     while True:
         # Capture the video frame
-        ret, image = video.read()
+        ret, img = video.read()
 
         # Display the resulting frame
         # to flip the video with 180 degree 
-        image = cv2.flip(image, 1)
-        cv2.imshow('frame', image)
+        image = cv2.flip(img, 1)
+        #cv2.imshow('frame', image)
         
         # save image for prediction
         image = cv2.imwrite('Frame'+str(0)+'.jpg', image)
         image = "Frame0.jpg"
-      
+        #image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         dim = (IMG_WIDTH, IMG_HEIGHT)
         
         image = tf.keras.preprocessing.image.load_img(image, target_size=dim)
@@ -79,7 +80,18 @@ def main():
         predictions = model.predict(input_arr)
         # Return the index_array of the maximum values along an axis.
         pre_class = np.argmax(predictions, axis=-1)
-        print(GESTURE[pre_class[0]])
+        #print(GESTURE[pre_class[0]])
+        text = GESTURE[pre_class[0]]
+        font = cv2.FONT_HERSHEY_SIMPLEX
+        image = cv2.flip(img, 1)
+        cv2.putText(image, 
+                text, 
+                (50, 50), 
+                font, 2, 
+                (0, 0, 0), 
+                2, 
+                cv2.LINE_4)
+        cv2.imshow('video', image)
     
 
         # the 'q' button is set as the
@@ -104,11 +116,9 @@ def main():
 def load_data(data_dir):
     """
     Load image data from directory `data_dir`.
-
     Assume `data_dir` has one directory named after each category, numbered
     0 through NUM_CATEGORIES - 1. Inside each category directory will be some
     number of image files.
-
     Return tuple `(images, labels)`. `images` should be a list of all
     of the images in the data directory, where each image is formatted as a
     numpy ndarray with dimensions IMG_WIDTH x IMG_HEIGHT x 3. `labels` should
@@ -126,7 +136,8 @@ def load_data(data_dir):
             # get the full path of specific image 
             full_path = os.path.join(data_dir, f"{str(dir)}", image_path)
             # Returns an image that is loaded from the specified file
-            image = cv2.imread(full_path)
+            image = cv2.imread(full_path, )
+            #image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
             # get dimension for each image
             dim = (IMG_WIDTH, IMG_HEIGHT)
             # resized the image
@@ -149,7 +160,7 @@ def get_model():
         [
         # Convolutional layer. Learn 32 filters using a 3x3 kernel
         tf.keras.layers.Conv2D(
-            32, (3, 3), activation='relu', input_shape=(IMG_WIDTH, IMG_HEIGHT, 3)
+            32, (5, 5), activation='relu', input_shape=(IMG_WIDTH, IMG_HEIGHT, 3)
         ),
         # Max-pooling layer, using 2x2 pool size
         tf.keras.layers.MaxPool2D(pool_size=(2, 2)),
@@ -157,11 +168,15 @@ def get_model():
             64, (3, 3), activation='relu', input_shape=((IMG_WIDTH)/2, (IMG_HEIGHT)/2, 3)
         ),
         tf.keras.layers.MaxPool2D(pool_size=(2, 2)),
-
+        tf.keras.layers.Conv2D(
+            128, (3, 3), activation='relu', input_shape=((IMG_WIDTH)/2, (IMG_HEIGHT)/2, 3)
+        ),
+        tf.keras.layers.MaxPool2D(pool_size=(2, 2)),
+        
         tf.keras.layers.Flatten(),
         # Add a hidden layer with dropout
         tf.keras.layers.Dense(128, activation='relu'),
-        tf.keras.layers.Dropout(0.3),
+        #tf.keras.layers.Dropout(0.3),
         # Add an output layer with output units for all 6 gestures
         tf.keras.layers.Dense(NUM_CATEGORIES, activation='softmax')
     ])
