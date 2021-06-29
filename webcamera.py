@@ -16,7 +16,7 @@ while True:
     
     
     cv2.imshow('frame', image)
-    cv2.imwrite('/home/arpine/Desktop/data/Frame'+str(i)+'.jpg', image)
+    cv2.imwrite('/home/arpine/Desktop/data/Frame'+str(i)+'.jpg', image, params=cv2.COLOR_BAYER_BG2GRAY)
 
     i += 1
     # the 'q' button is set as the
