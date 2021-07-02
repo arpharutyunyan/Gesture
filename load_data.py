@@ -4,8 +4,8 @@ import os
 import sys
 from datetime import datetime
 
-IMG_WIDTH = 256
-IMG_HEIGHT = 196
+IMG_WIDTH = 100
+IMG_HEIGHT = 77
 NUM_CATEGORIES = 5
 
 def load_data(data_dir):
@@ -47,12 +47,12 @@ def load_data(data_dir):
 start_time = datetime.now()  
 print("Loading ===========")
 
-finish_loading_time = datetime.now()
-print("Images load time: ", finish_loading_time - start_time)
-
 images, labels = load_data("/home/arpine/Desktop/Gesture/DATA")
 images = np.array(images)
 labels = np.array(labels)
+finish_loading_time = datetime.now()
+print("Images load time: ", finish_loading_time - start_time)
+
 
 start_time = datetime.now()  
 print("start saving")
