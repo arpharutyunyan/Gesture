@@ -10,7 +10,7 @@ import sys
 # from sklearn.model_selection import train_test_split
 # from tensorflow.python.ops.gen_math_ops import mod
 
-add =  "/home/arpine/Desktop/test"
+add =  "/home/arpine/Desktop/DATA"
 
 addr = os.listdir(add)
 # del(addr[0])

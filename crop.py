@@ -3,7 +3,10 @@ import cv2
 import mediapipe
 import uuid
 import numpy as np
+from datetime import datetime
 
+
+start = datetime.now()
 def absoluteFilePaths(directory):
     for dirpath,_,filenames in os.walk(directory):
         for f in filenames:
@@ -11,10 +14,10 @@ def absoluteFilePaths(directory):
             yield [data_type, os.path.abspath(os.path.join(dirpath, f))]
 
 
-answers = {"palm": 0, "thumb up": 1, "thumb down": 2, "ok": 3, "fist": 4, "l": 5}
+answers = {"l":4, "palm": 3, "thumb up": 2, "thumb down": 1, "ok": 0}
 handsModule = mediapipe.solutions.hands
 
-for i in absoluteFilePaths("/home/arpine/Desktop/Gesture/DATA"):
+for i in absoluteFilePaths("/home/arpine/Desktop/Gesture/image/raul"):
         with handsModule.Hands(static_image_mode=True) as hands:
 
             image = cv2.imread(i[-1])
@@ -27,9 +30,10 @@ for i in absoluteFilePaths("/home/arpine/Desktop/Gesture/DATA"):
                     y = [landmark.y for landmark in hand_landmark.landmark]
                 
                     center = np.array([np.mean(x)*image_width, np.mean(y)*image_height]).astype('int32')
-                    #cv2.circle(image, tuple(center), 10, (255,0,0), 1) #for checking the center
-                    #cv2.rectangle(image, (center[0]-128,center[1]-128), (center[0]+128,center[1]+128), (255,0,0), 1)
+                    # cv2.circle(image, tuple(center), 10, (255,0,0), 1) #for checking the center
+                    # cv2.rectangle(image, (center[0]-128,center[1]-128), (center[0]+128,center[1]+128), (255,0,0), 1)
                     hand = image[center[1]-128:center[1]+128, center[0]-128:center[0]+128]
                     if hand.shape==(256, 256, 3):
                         cv2.imwrite(f"{i[0]}/" + str(uuid.uuid1()) + ".png", hand)
-                      
+
+print("finish ", datetime.now()-start)
