@@ -10,9 +10,10 @@ import sys
 # from sklearn.model_selection import train_test_split
 # from tensorflow.python.ops.gen_math_ops import mod
 
-add =  "/home/arpine/Desktop/DATA"
+add =  "/home/arpine/Desktop/tomas_2"
 
 addr = os.listdir(add)
+# print(addr)
 # del(addr[0])
 # del(addr[0])
 # del(addr[0])
@@ -32,36 +33,42 @@ addr = os.listdir(add)
 # addr.remove("README.md")
 
 print("start")
-# for dir in addr:
-#         # get path for each gesture like "/home/arpine/Desktop/data/0": 
-#         # add =  "/home/arpine/Desktop/Gesture"
-#         # d = os.path.join(add, f"{str(dir)}")
-#         # os.listdir(d) return the list of all names of images in that folder
-#         ges_path = os.path.join(add, dir)
-#         for gesture_path in os.listdir(ges_path):
-#             im_path = os.path.join(ges_path, gesture_path)
-
-#             for image_path in os.listdir(im_path):
-#                 full_path = os.path.join(im_path, image_path)
-#                 # Returns an image that is loaded from the specified file
-#                 format = full_path.split(".")[1]
-#                 if format == "png" or format == "jpg":
-#                     image = cv2.imread(full_path)
-#                     # get dimension for each image
-#                     # dim = (IMG_WIDTH, IMG_HEIGHT)
-#                     # resized the image
-#                     # image_resized = cv2.resize(image, dim, interpolation = cv2.INTER_AREA)
-#                     filename = os.path.join("/home/arpine/Desktop/Gesture/DATA", gesture_path, f"image_{str(i)}.{format}")
-#                     image = cv2.imwrite(filename, image)
-#                     i+=1
-# print("finish" + i)
-
+i = 121
 for dir in addr:
-    print(dir)
-    d = os.path.join(add, f"{str(dir)}")
-    #ges_path = os.path.join(add, dir)
-    image = os.listdir(d)
-    for i in range(0, len(image), 2):
-        ges_path = os.path.join(d, image[i])
-        os.remove(ges_path)
-print("finish")
+        # get path for each gesture like "/home/arpine/Desktop/data/0": 
+        # add =  "/home/arpine/Desktop/alberto"
+        # d = os.path.join(add, f"{str(dir)}")
+        # os.listdir(d) return the list of all names of images in that folder
+        ges_path = os.path.join(add, dir)
+        # print(os.listdir(ges_path))
+        for gesture_path in os.listdir(ges_path):
+            im_path = os.path.join(ges_path, gesture_path)
+
+            # for image_path in os.listdir(im_path):
+            #     full_path = os.path.join(im_path, image_path)
+                # Returns an image that is loaded from the specified file
+            format = im_path.split(".")[1]
+            if format == "png" or format == "jpg":
+                image = cv2.imread(im_path)
+                # get dimension for each image
+                # dim = (IMG_WIDTH, IMG_HEIGHT)
+                # resized the image
+                # image_resized = cv2.resize(image, dim, interpolation = cv2.INTER_AREA)
+                filename = os.path.join("/home/arpine/Desktop/Gesture/test", dir, f"image_{str(i)}.{format}")
+                image = cv2.imwrite(filename, image)
+            i +=1
+            if i == 151:
+                break
+
+        i = 121
+print("finish" )
+
+# for dir in addr:
+#     print(dir)
+#     d = os.path.join(add, f"{str(dir)}")
+#     #ges_path = os.path.join(add, dir)
+#     image = os.listdir(d)
+#     for i in range(0, len(image), 2):
+#         ges_path = os.path.join(d, image[i])
+#         os.remove(ges_path)
+# print("finish")
