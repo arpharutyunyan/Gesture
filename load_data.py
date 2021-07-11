@@ -27,6 +27,7 @@ def load_data(data_dir):
         # get path for each gesture like "/home/arpine/Desktop/data/0":  
         d = os.path.join(data_dir, f"{str(dir)}")
         # os.listdir(d) return the list of all names of images in that folder
+        print(d)
         for image_path in os.listdir(d):
             # get the full path of specific image 
             full_path = os.path.join(data_dir, f"{str(dir)}", image_path)
@@ -49,7 +50,7 @@ start_time = datetime.now()
 print("Loading ===========")
 
 
-images, labels = load_data("/home/arpine/Desktop/Gesture/train")
+images, labels = load_data("/home/arpine/Desktop/Gesture/valid")
 images = np.array(images)
 labels = np.array(labels)
 finish_loading_time = datetime.now()
@@ -58,8 +59,8 @@ print("Images load time: ", finish_loading_time - start_time)
 
 start_time = datetime.now()  
 print("start saving")
-np.save("images_train.npy", images)
-np.save("labels_train.npy" , labels)
+np.save("images_valid.npy", images)
+np.save("labels_valid.npy" , labels)
 finish_loading_time = datetime.now()
 print("Images load time: ", finish_loading_time - start_time)
 # # # np.savetxt("images.csv", images, delimiter=',')

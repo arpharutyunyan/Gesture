@@ -16,15 +16,16 @@ while True:
     
     
     cv2.imshow('frame', image)
-    cv2.imwrite('/home/arpine/Desktop/data/Frame'+str(i)+'.jpg', image, params=cv2.COLOR_BAYER_BG2GRAY)
+    cv2.imwrite('/home/arpine/Desktop/Gesture/my/'+str(i)+'.jpg', image)
 
     i += 1
     # the 'q' button is set as the
     # quitting button you may use any
     # desired button of your choice
 
-    if cv2.waitKey(1) and 0XFF == ord('q'):
-        break
+    k = cv2.waitKey(1)
+    if k == ord('q'):
+            break
 
 
 
